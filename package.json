@@ -1,0 +1,27 @@
+{
+  "name": "vsts-api",
+  "version": "1.0.0",
+  "description": "Node.js client library for Visual Studio Team Services REST API",
+  "main": "out/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node out/test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlandersen/vsts-api.git"
+  },
+  "keywords": [
+    "visual",
+    "studio",
+    "tfs"
+  ],
+  "author": "Jeppe Andersen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jlandersen/vsts-api/issues"
+  },
+  "homepage": "https://github.com/jlandersen/vsts-api#readme"
+}
