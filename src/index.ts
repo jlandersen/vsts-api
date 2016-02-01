@@ -1,0 +1,1 @@
+export { VstsClient, VstsConfiguration } from "./vstsclient";

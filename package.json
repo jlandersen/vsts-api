@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "Node.js client library for Visual Studio Team Services REST API",
   "main": "out/index.js",
+  "dependencies": {
+      "restler": "^3.4.0"
+  },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node out/test/test.js"
+    "test": "node out/test/test.js",
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
