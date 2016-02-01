@@ -1,7 +1,7 @@
 "use strict";
 
-import rest = require("restler");
-import { BuildClient } from "./clients/build";
+import * as rest from "restler";
+import { ProjectClient } from "./clients/project";
 
 export class VstsConfiguration {
     private _url: string;
@@ -21,37 +21,37 @@ export class VstsConfiguration {
     public get username(): string {
         return this._username;
     }
+
     public get password(): string {
         return this._password;
     }
 }
 
-export class VstsClient {
-    private configuration: VstsConfiguration;
-    private restExecutor: VstsRestExecutor;
-
-    private _buildClient: BuildClient;
-
-    constructor(configuration: VstsConfiguration) {
-        this.configuration = configuration;
-        this.restExecutor = new VstsRestlerRestExecutor(configuration);
-        this._buildClient = new BuildClient(this.restExecutor);
-    }
-
-    public get build(): BuildClient {
-        return this._buildClient;
-    }
-}
-
 export class VstsRestRequest {
-    public httpMethod: string;
-    public resource: string;
-    public version: string;
+    private _resource: string;
+    private _httpMethod: string;
+    private _version: string;
 
     constructor(resource: string, httpMethod: string, version: string) {
-        this.resource = resource;
-        this.httpMethod = httpMethod;
-        this.version = version;
+        this._resource = resource;
+        this._httpMethod = httpMethod;
+        this._version = version;
+    }
+
+    public get resource(): string {
+        return this._resource;
+    }
+
+    public get httpMethod(): string {
+        return this._httpMethod;
+    }
+
+    public get version(): string {
+        return this._version;
+    }
+
+    public getRequestQuery() {
+        return this._resource + "?version=" + this._version;
     }
 }
 
@@ -59,28 +59,48 @@ export interface VstsRestExecutor {
     Execute<T>(request: VstsRestRequest): Promise<T>;
 }
 
-class VstsRestlerRestExecutor {
-    private authOptions: any;
+class VstsRestlerRestExecutor implements VstsRestExecutor {
     private baseUrl: string;
+    private authOptions: any;
 
-    constructor(options: VstsConfiguration) {
+    constructor(configuration: VstsConfiguration) {
         let authOptions = {
-            username: options.username,
-            password: options.password
+            username: configuration.username,
+            password: configuration.password
         };
 
-        this.baseUrl = options.url;
+        this.baseUrl = configuration.url;
         this.authOptions = authOptions;
     }
 
     public Execute<T>(request: VstsRestRequest): Promise<T> {
-        let url = this.baseUrl + request.resource;
-        console.log(this.authOptions);
-        console.log(url);
+        let url = this.baseUrl + request.getRequestQuery();
 
-        return rest.get(url, this.authOptions).on("complete", (data: any, response: any) => {
-            console.log(data);
+        let executePromise = new Promise((resolve, reject) => {
+            rest.get(url, this.authOptions).on("complete", (data: any, response: any) => {
+                resolve(data);
+            });
         });
+        return executePromise;
     }
 }
 
+export class VstsClient {
+    private restExecutor: VstsRestExecutor;
+
+    private _projectClient: ProjectClient;
+
+    constructor(restExecutor: VstsRestExecutor) {
+        this.restExecutor = restExecutor;
+
+        this._projectClient = new ProjectClient(this.restExecutor);
+    }
+
+    public static createFromConfiguration(configuration: VstsConfiguration): VstsClient {
+        return new VstsClient(new VstsRestlerRestExecutor(configuration));
+    }
+
+    public get project() {
+        return this._projectClient;
+    }
+}

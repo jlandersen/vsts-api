@@ -4,13 +4,13 @@
   "description": "Node.js client library for Visual Studio Team Services REST API",
   "main": "out/index.js",
   "dependencies": {
-      "restler": "^3.4.0"
+    "restler": "^3.4.0"
   },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node out/test/test.js",
+    "test": "jasmine",
     "build": "tsc -p ."
   },
   "repository": {
@@ -27,5 +27,10 @@
   "bugs": {
     "url": "https://github.com/jlandersen/vsts-api/issues"
   },
-  "homepage": "https://github.com/jlandersen/vsts-api#readme"
+  "homepage": "https://github.com/jlandersen/vsts-api#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jasmine-core": "^2.4.1",
+    "mocha": "^2.4.5"
+  }
 }
