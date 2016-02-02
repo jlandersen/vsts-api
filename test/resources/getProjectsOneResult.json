@@ -1,0 +1,12 @@
+{
+  "count": 1,
+  "value": [
+    {
+      "id": "6ce954b1-ce1f-45d1-b94d-e6bf2464ba2c",
+      "name": "Fabrikam-Fiber-Git",
+      "description": "Git projects",
+      "url": "https://fabrikam.visualstudio.com/DefaultCollection/_apis/projects/6ce954b1-ce1f-45d1-b94d-e6bf2464ba2c",
+      "state": "wellFormed"
+    }
+  ]
+}
