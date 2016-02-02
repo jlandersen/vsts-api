@@ -1,7 +1,7 @@
 "use strict";
 
 import fs = require("fs");
-import {VstsRestRequest} from "../../src/vstsclient";
+import {VstsRestRequest} from "../../src/vstsClient";
 
 export class TestExecutor {
     private matchingUrl: string;

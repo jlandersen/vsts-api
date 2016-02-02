@@ -1,1 +1,1 @@
-export { VstsClient, VstsConfiguration } from "./vstsclient";
+export { VstsClient, VstsConfiguration } from "./vstsClient";

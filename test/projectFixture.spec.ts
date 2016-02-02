@@ -1,7 +1,7 @@
 "use strict";
 
 import {VstsClient, VstsConfiguration} from "../src/index";
-import {TestExecutor} from "./helpers/testexecutor";
+import {TestExecutor} from "./helpers/testExecutor";
 
 describe("Project Fixture", () => {
     describe("#getProjects()", () => {
