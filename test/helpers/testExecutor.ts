@@ -12,7 +12,7 @@ export class TestExecutor {
         this.matchingUrl = matchingUrl;
         this.responseFile = responseFile;
 
-        this.responseBody = JSON.parse(fs.readFileSync("out/test/resources/" + responseFile + ".json", "utf8"));
+        this.responseBody = JSON.parse(fs.readFileSync(`test/resources/${responseFile}.json`, "utf8"));
     }
 
     public Execute<T>(request: VstsRestRequest): Promise<T> {
