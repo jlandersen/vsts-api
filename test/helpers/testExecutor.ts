@@ -16,8 +16,8 @@ export class TestExecutor {
     }
 
     public Execute<T>(request: VstsRestRequest): Promise<T> {
-        if (request.getRequestQuery() !== this.matchingUrl) {
-            throw new Error("Invalid request");
+        if (request.getRequestUrl() !== this.matchingUrl) {
+            throw new Error("Invalid request - expected " + this.matchingUrl + " - got " + request.getRequestUrl());
         }
 
         return Promise.resolve(<T>this.responseBody);

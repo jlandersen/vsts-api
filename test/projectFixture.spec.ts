@@ -65,4 +65,38 @@ describe("Project Fixture", () => {
             });
         });
     });
+
+    describe("#getProject()", () => {
+        it("Should return project with no capabilities", (done) => {
+            let testProjectName = "Fabrikam-Fiber-TFVC";
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0`, "getProject");
+            let client = new VstsClient(mockExecutor);
+
+            return client.project.getProject(testProjectName, false).then(result => {
+                expect(result.name).toBe(testProjectName);
+                expect(result.id).toBe("eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
+                expect(result.url).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_apis/projects/eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
+                expect(result.state).toBe("wellFormed");
+                expect(result.capabilities).toBeNull;
+
+                done();
+            });
+        });
+
+        it("Should return project with capabilities", (done) => {
+            let testProjectName = "Fabrikam-Fiber-TFVC";
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0&includeCapabilities=true`, "getProject");
+            let client = new VstsClient(mockExecutor);
+
+            return client.project.getProject(testProjectName, true).then(result => {
+                expect(result.name).toBe(testProjectName);
+                expect(result.id).toBe("eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
+                expect(result.url).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_apis/projects/eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
+                expect(result.state).toBe("wellFormed");
+                expect(result.capabilities).not.toBeNull;
+
+                done();
+            });
+        });
+    });
 });

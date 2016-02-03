@@ -32,6 +32,8 @@ export class VstsRestRequest {
     private _httpMethod: string;
     private _version: string;
 
+    private queryParameters: { [parameter: string]: string } = {};
+
     constructor(resource: string, httpMethod: string, version: string) {
         this._resource = resource;
         this._httpMethod = httpMethod;
@@ -50,8 +52,22 @@ export class VstsRestRequest {
         return this._version;
     }
 
-    public getRequestQuery() {
-        return this._resource + "?version=" + this._version;
+    public addQueryParameter(parameter: string, value: string): VstsRestRequest {
+        this.queryParameters[parameter] = value;
+
+        return this;
+    }
+
+    public getRequestUrl() {
+        let queryString = "";
+
+        for (let queryParameter in this.queryParameters) {
+            queryString += `&${queryParameter}=${this.queryParameters[queryParameter]}`;
+        }
+
+        let result = `${this._resource}?version=${this._version}${queryString}`;
+
+        return result;
     }
 }
 
@@ -74,7 +90,7 @@ class VstsRestlerRestExecutor implements VstsRestExecutor {
     }
 
     public Execute<T>(request: VstsRestRequest): Promise<T> {
-        let url = this.baseUrl + request.getRequestQuery();
+        let url = this.baseUrl + request.getRequestUrl();
 
         let executePromise = new Promise((resolve, reject) => {
             rest.get(url, this.authOptions).on("complete", (data: any, response: any) => {
