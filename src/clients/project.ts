@@ -1,6 +1,6 @@
 "use strict";
 
-import { VstsRestExecutor, VstsRestRequest } from "../vstsClient";
+import { VstsRestExecutor, VstsRestRequest, HttpMethod } from "../vstsClient";
 import { Sequence } from "./common";
 
 export interface Project {
@@ -23,19 +23,20 @@ export class ProjectClient {
     }
 
     public getProjects(): Promise<Project[]> {
-        let request = new VstsRestRequest("/_apis/projects", "GET", "1.0");
-        return this.restExecutor.Execute<Sequence<Project>>(request).then(result => {
+        let request = new VstsRestRequest("/_apis/projects", HttpMethod.GET, "1.0");
+
+        return this.restExecutor.execute<Sequence<Project>>(request).then(result => {
             return result.value;
         });
     }
 
     public getProject(nameOrId: string, includeCapabilities: boolean = false) {
-        let request = new VstsRestRequest(`/_apis/projects/${nameOrId}`, "GET", "1.0");
+        let request = new VstsRestRequest(`/_apis/projects/${nameOrId}`, HttpMethod.GET, "1.0");
 
         if (includeCapabilities) {
             request.addQueryParameter("includeCapabilities", includeCapabilities.toString());
         }
 
-        return this.restExecutor.Execute<Project>(request);
+        return this.restExecutor.execute<Project>(request);
     }
 }

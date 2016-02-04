@@ -27,14 +27,20 @@ export class VstsConfiguration {
     }
 }
 
+
+export enum HttpMethod {
+    GET,
+    POST
+}
+
 export class VstsRestRequest {
     private _resource: string;
-    private _httpMethod: string;
+    private _httpMethod: HttpMethod;
     private _version: string;
 
     private queryParameters: { [parameter: string]: string } = {};
 
-    constructor(resource: string, httpMethod: string, version: string) {
+    constructor(resource: string, httpMethod: HttpMethod, version: string) {
         this._resource = resource;
         this._httpMethod = httpMethod;
         this._version = version;
@@ -44,7 +50,7 @@ export class VstsRestRequest {
         return this._resource;
     }
 
-    public get httpMethod(): string {
+    public get httpMethod(): HttpMethod {
         return this._httpMethod;
     }
 
@@ -72,7 +78,7 @@ export class VstsRestRequest {
 }
 
 export interface VstsRestExecutor {
-    Execute<T>(request: VstsRestRequest): Promise<T>;
+    execute<T>(request: VstsRestRequest): Promise<T>;
 }
 
 class VstsRestlerRestExecutor implements VstsRestExecutor {
@@ -89,7 +95,7 @@ class VstsRestlerRestExecutor implements VstsRestExecutor {
         this.authOptions = authOptions;
     }
 
-    public Execute<T>(request: VstsRestRequest): Promise<T> {
+    public execute<T>(request: VstsRestRequest): Promise<T> {
         let url = this.baseUrl + request.getRequestUrl();
 
         let executePromise = new Promise((resolve, reject) => {

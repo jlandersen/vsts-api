@@ -1,9 +1,9 @@
 "use strict";
 
 import fs = require("fs");
-import {VstsRestRequest} from "../../src/vstsClient";
+import {VstsRestRequest, VstsRestExecutor} from "../../src/vstsClient";
 
-export class TestExecutor {
+export class TestExecutor implements VstsRestExecutor {
     private matchingUrl: string;
     private responseFile: string;
     private responseBody: any;
@@ -15,7 +15,7 @@ export class TestExecutor {
         this.responseBody = JSON.parse(fs.readFileSync(`test/resources/${responseFile}.json`, "utf8"));
     }
 
-    public Execute<T>(request: VstsRestRequest): Promise<T> {
+    public execute<T>(request: VstsRestRequest): Promise<T> {
         if (request.getRequestUrl() !== this.matchingUrl) {
             throw new Error("Invalid request - expected " + this.matchingUrl + " - got " + request.getRequestUrl());
         }
