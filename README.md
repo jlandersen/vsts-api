@@ -38,6 +38,7 @@ let vs = require("vsts-api");
 let configuration = new vs.VstsConfiguration("https://myaccount.visualstudio.com/DefaultCollection", "user", "password");
 let client = vs.VstsClient.createFromConfiguration(configuration);
 
+// Lists name of all projects
 client.project.getProjects().then(result => {
     for (let project of result) {
         console.log(project.name);
