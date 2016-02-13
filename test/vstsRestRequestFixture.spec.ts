@@ -1,6 +1,6 @@
 "use strict";
 
-import { VstsRestRequest, HttpMethod } from "../src/vstsClient";
+import { VstsRestRequest, HttpMethod } from "../src/vstsRestExecutor";
 
 describe("VSTS Rest Request Fixture", () => {
     it("Should return request path with version query string", () => {

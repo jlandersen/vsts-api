@@ -1,6 +1,6 @@
 "use strict";
 
-import * as rest from "restler";
+import { VstsRestExecutor, VstsRestlerRestExecutor } from "./vstsRestExecutor";
 import { ProjectClient } from "./clients/project";
 
 export class VstsConfiguration {
@@ -28,85 +28,6 @@ export class VstsConfiguration {
 }
 
 
-export enum HttpMethod {
-    GET,
-    POST
-}
-
-export class VstsRestRequest {
-    private _resource: string;
-    private _httpMethod: HttpMethod;
-    private _version: string;
-
-    private queryParameters: { [parameter: string]: string } = {};
-
-    constructor(resource: string, httpMethod: HttpMethod, version: string) {
-        this._resource = resource;
-        this._httpMethod = httpMethod;
-        this._version = version;
-    }
-
-    public get resource(): string {
-        return this._resource;
-    }
-
-    public get httpMethod(): HttpMethod {
-        return this._httpMethod;
-    }
-
-    public get version(): string {
-        return this._version;
-    }
-
-    public addQueryParameter(parameter: string, value: string): VstsRestRequest {
-        this.queryParameters[parameter] = value;
-
-        return this;
-    }
-
-    public getRequestUrl() {
-        let queryString = "";
-
-        for (let queryParameter in this.queryParameters) {
-            queryString += `&${queryParameter}=${this.queryParameters[queryParameter]}`;
-        }
-
-        let result = `${this._resource}?version=${this._version}${queryString}`;
-
-        return result;
-    }
-}
-
-export interface VstsRestExecutor {
-    execute<T>(request: VstsRestRequest): Promise<T>;
-}
-
-class VstsRestlerRestExecutor implements VstsRestExecutor {
-    private baseUrl: string;
-    private authOptions: any;
-
-    constructor(configuration: VstsConfiguration) {
-        let authOptions = {
-            username: configuration.username,
-            password: configuration.password
-        };
-
-        this.baseUrl = configuration.url;
-        this.authOptions = authOptions;
-    }
-
-    public execute<T>(request: VstsRestRequest): Promise<T> {
-        let url = this.baseUrl + request.getRequestUrl();
-
-        let executePromise = new Promise((resolve, reject) => {
-            rest.get(url, this.authOptions).on("complete", (data: any, response: any) => {
-                resolve(data);
-            });
-        });
-        return executePromise;
-    }
-}
-
 export class VstsClient {
     private restExecutor: VstsRestExecutor;
 
@@ -119,7 +40,12 @@ export class VstsClient {
     }
 
     public static createFromConfiguration(configuration: VstsConfiguration): VstsClient {
-        return new VstsClient(new VstsRestlerRestExecutor(configuration));
+        let authOptions = {
+            username: configuration.username,
+            password: configuration.password
+        };
+
+        return new VstsClient(new VstsRestlerRestExecutor(configuration.url, authOptions));
     }
 
     public get project() {

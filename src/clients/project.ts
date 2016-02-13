@@ -1,6 +1,6 @@
 "use strict";
 
-import { VstsRestExecutor, VstsRestRequest, HttpMethod } from "../vstsClient";
+import { VstsRestExecutor, VstsRestRequest, HttpMethod } from "../vstsRestExecutor";
 import { Sequence } from "./common";
 
 export interface Project {
@@ -13,6 +13,13 @@ export interface Project {
 }
 
 export interface ProjectCapabilities {
+    versioncontrol: {
+        sourceControlType: string
+    };
+    processTemplate: {
+        templateTypeId: string;
+        templateName: string;
+    };
 }
 
 export class ProjectClient {
@@ -30,7 +37,7 @@ export class ProjectClient {
         });
     }
 
-    public getProject(nameOrId: string, includeCapabilities: boolean = false) {
+    public getProject(nameOrId: string, includeCapabilities: boolean = false): Promise<Project> {
         let request = new VstsRestRequest(`/_apis/projects/${nameOrId}`, HttpMethod.GET, "1.0");
 
         if (includeCapabilities) {

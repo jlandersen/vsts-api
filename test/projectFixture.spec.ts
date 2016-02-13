@@ -6,7 +6,7 @@ import {TestExecutor} from "./helpers/testExecutor";
 describe("Project Fixture", () => {
     describe("#getProjects()", () => {
         it("Should return multiple projects", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "getProjects");
+            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjects");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -36,7 +36,7 @@ describe("Project Fixture", () => {
         });
 
         it("Should return single project when only one exists", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "getProjectsOneResult");
+            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjectsOneResult");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -54,7 +54,7 @@ describe("Project Fixture", () => {
         });
 
         it("Should return no projects if none exists", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "getProjectsEmpty");
+            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjectsEmpty");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -69,7 +69,7 @@ describe("Project Fixture", () => {
     describe("#getProject()", () => {
         it("Should return project with no capabilities", (done) => {
             let testProjectName = "Fabrikam-Fiber-TFVC";
-            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0`, "getProject");
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0`, "GET", "getProject");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProject(testProjectName, false).then(result => {
@@ -77,7 +77,8 @@ describe("Project Fixture", () => {
                 expect(result.id).toBe("eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
                 expect(result.url).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_apis/projects/eb6e4656-77fc-42a1-9181-4c6d8e9da5d1");
                 expect(result.state).toBe("wellFormed");
-                expect(result.capabilities).toBeNull;
+                expect(result.capabilities.versioncontrol.sourceControlType).toBe("Tfvc");
+                expect(result.capabilities.processTemplate.templateName).toBe("Microsoft Visual Studio Scrum 2013");
 
                 done();
             });
@@ -85,7 +86,7 @@ describe("Project Fixture", () => {
 
         it("Should return project with capabilities", (done) => {
             let testProjectName = "Fabrikam-Fiber-TFVC";
-            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0&includeCapabilities=true`, "getProject");
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0&includeCapabilities=true`, "GET", "getProject");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProject(testProjectName, true).then(result => {

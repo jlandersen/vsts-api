@@ -1,16 +1,18 @@
 "use strict";
 
 import fs = require("fs");
-import {VstsRestRequest, VstsRestExecutor} from "../../src/vstsClient";
+import {VstsRestRequest, VstsRestExecutor, HttpMethod} from "../../src/vstsRestExecutor";
 
 export class TestExecutor implements VstsRestExecutor {
     private matchingUrl: string;
+    private matchingHttpMethod: string;
     private responseFile: string;
     private responseBody: any;
 
-    constructor(matchingUrl: string, responseFile: string) {
+    constructor(matchingUrl: string, matchingHttpMethod: string, responseFile: string) {
         this.matchingUrl = matchingUrl;
         this.responseFile = responseFile;
+        this.matchingHttpMethod = matchingHttpMethod;
 
         this.responseBody = JSON.parse(fs.readFileSync(`test/resources/${responseFile}.json`, "utf8"));
     }
@@ -20,7 +22,10 @@ export class TestExecutor implements VstsRestExecutor {
             throw new Error("Invalid request - expected " + this.matchingUrl + " - got " + request.getRequestUrl());
         }
 
-        return Promise.resolve(<T>this.responseBody);
+        if (HttpMethod[request.httpMethod] !== this.matchingHttpMethod) {
+            throw new Error("Invalid request - expected method " + this.matchingHttpMethod + " - got " + request.httpMethod);
+        }
 
+        return Promise.resolve(<T>this.responseBody);
     }
 }
