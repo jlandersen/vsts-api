@@ -1,0 +1,9 @@
+src/
+test/
+typings/
+spec/
+.vscode/
+js/test/
+tsconfig.json
+.travis.yml
+tsd.json
