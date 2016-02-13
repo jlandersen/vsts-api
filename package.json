@@ -2,7 +2,7 @@
   "name": "vsts-api",
   "version": "1.0.0",
   "description": "Node.js client library for Visual Studio Team Services REST API",
-  "main": "out/index.js",
+  "main": "out/src/index.js",
   "dependencies": {
     "restler": "^3.4.0"
   },
@@ -29,8 +29,6 @@
   },
   "homepage": "https://github.com/jlandersen/vsts-api#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "jasmine-core": "^2.4.1",
-    "mocha": "^2.4.5"
+    "jasmine-core": "^2.4.1"
   }
 }
