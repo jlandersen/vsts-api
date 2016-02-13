@@ -2,7 +2,7 @@
   "name": "vsts-api",
   "version": "1.0.0",
   "description": "Node.js client library for Visual Studio Team Services REST API",
-  "main": "out/src/index.js",
+  "main": "js/src/index.js",
   "dependencies": {
     "restler": "^3.4.0"
   },
