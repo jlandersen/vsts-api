@@ -16,6 +16,35 @@ Unit tests are created using Jasmine.
 
 To run the test suite, simply run `npm test`.
 
+## Quick Start (TypeScript)
+```typescript
+import { VstsClient, VstsConfiguration } from "vsts-api";
+
+let configuration = new VstsConfiguration("https://myaccount.visualstudio.com/DefaultCollection", "user", "password");
+let client = VstsClient.createFromConfiguration(configuration);
+
+// Lists name of all projects
+client.project.getProjects().then(result => {
+    for (let project of result) {
+        console.log(project.name);
+    }
+});
+```
+
+## Quick Start (JavaScript)
+```javascript
+let vs = require("vsts-api");
+
+let configuration = new vs.VstsConfiguration("https://myaccount.visualstudio.com/DefaultCollection", "user", "password");
+let client = vs.VstsClient.createFromConfiguration(configuration);
+
+client.project.getProjects().then(result => {
+    for (let project of result) {
+        console.log(project.name);
+    }
+});
+```
+
 ## License
 Copyright (c) Jeppe Andersen. All rights reserved.
 
