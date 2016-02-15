@@ -6,7 +6,7 @@ import {TestExecutor} from "./helpers/testExecutor";
 describe("Project Fixture", () => {
     describe("#getProjects()", () => {
         it("Should return multiple projects", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjects");
+            let mockExecutor = new TestExecutor("/_apis/projects?api-version=1.0", "GET", "getProjects");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -36,7 +36,7 @@ describe("Project Fixture", () => {
         });
 
         it("Should return single project when only one exists", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjectsOneResult");
+            let mockExecutor = new TestExecutor("/_apis/projects?api-version=1.0", "GET", "getProjectsOneResult");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -54,7 +54,7 @@ describe("Project Fixture", () => {
         });
 
         it("Should return no projects if none exists", (done) => {
-            let mockExecutor = new TestExecutor("/_apis/projects?version=1.0", "GET", "getProjectsEmpty");
+            let mockExecutor = new TestExecutor("/_apis/projects?api-version=1.0", "GET", "getProjectsEmpty");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProjects().then(result => {
@@ -69,7 +69,7 @@ describe("Project Fixture", () => {
     describe("#getProject()", () => {
         it("Should return project with no capabilities", (done) => {
             let testProjectName = "Fabrikam-Fiber-TFVC";
-            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0`, "GET", "getProject");
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?api-version=1.0`, "GET", "getProject");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProject(testProjectName, false).then(result => {
@@ -86,7 +86,7 @@ describe("Project Fixture", () => {
 
         it("Should return project with capabilities", (done) => {
             let testProjectName = "Fabrikam-Fiber-TFVC";
-            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?version=1.0&includeCapabilities=true`, "GET", "getProject");
+            let mockExecutor = new TestExecutor(`/_apis/projects/${testProjectName}?api-version=1.0&includeCapabilities=true`, "GET", "getProject");
             let client = new VstsClient(mockExecutor);
 
             return client.project.getProject(testProjectName, true).then(result => {

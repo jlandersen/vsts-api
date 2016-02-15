@@ -2,6 +2,7 @@
 
 import { VstsRestExecutor, VstsRestlerRestExecutor } from "./vstsRestExecutor";
 import { ProjectClient } from "./clients/project";
+import { TeamClient } from "./clients/team";
 
 export class VstsConfiguration {
     private _url: string;
@@ -27,16 +28,17 @@ export class VstsConfiguration {
     }
 }
 
-
 export class VstsClient {
     private restExecutor: VstsRestExecutor;
 
     private _projectClient: ProjectClient;
+    private _teamClient: TeamClient;
 
     constructor(restExecutor: VstsRestExecutor) {
         this.restExecutor = restExecutor;
 
         this._projectClient = new ProjectClient(this.restExecutor);
+        this._teamClient = new TeamClient(this.restExecutor);
     }
 
     public static createFromConfiguration(configuration: VstsConfiguration): VstsClient {
@@ -50,5 +52,9 @@ export class VstsClient {
 
     public get project() {
         return this._projectClient;
+    }
+
+    public get team() {
+        return this._teamClient;
     }
 }

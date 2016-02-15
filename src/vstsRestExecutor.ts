@@ -2,13 +2,16 @@ import restler = require("restler");
 
 export enum HttpMethod {
     GET,
-    POST
+    POST,
+    PATCH,
+    DELETE
 }
 
 export class VstsRestRequest {
     private _resource: string;
     private _httpMethod: HttpMethod;
     private _version: string;
+    private _body: any;
 
     private queryParameters: { [parameter: string]: string } = {};
 
@@ -30,6 +33,14 @@ export class VstsRestRequest {
         return this._version;
     }
 
+    public set body(value: any) {
+        this._body = value;
+    }
+
+    public get body(): any {
+        return this._body;
+    }
+
     public addQueryParameter(parameter: string, value: string): VstsRestRequest {
         this.queryParameters[parameter] = value;
 
@@ -43,8 +54,7 @@ export class VstsRestRequest {
             queryString += `&${queryParameter}=${this.queryParameters[queryParameter]}`;
         }
 
-        let result = `${this._resource}?version=${this._version}${queryString}`;
-
+        let result = `${this._resource}?api-version=${this._version}${queryString}`;
         return result;
     }
 }
@@ -66,9 +76,14 @@ export class VstsRestlerRestExecutor implements VstsRestExecutor {
         let url = this.baseUrl + request.getRequestUrl();
         let restlerRequest = this.createRequest(request);
 
+        console.log(restlerRequest);
         let executePromise = new Promise((resolve, reject) => {
             restler.request(url, restlerRequest).on("complete", (data: any, response: any) => {
-                resolve(JSON.parse(data));
+                if (data) {
+                    resolve(JSON.parse(data));
+                } else {
+                    resolve();
+                }
             });
         });
 
@@ -77,9 +92,13 @@ export class VstsRestlerRestExecutor implements VstsRestExecutor {
 
     private createRequest(request: VstsRestRequest): restler.RestlerOptions {
         let restlerRequest: restler.RestlerOptions = {
-              method: HttpMethod[request.httpMethod].toLowerCase(),
-              username: this.authOptions.username,
-              password: this.authOptions.password
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: HttpMethod[request.httpMethod].toLowerCase(),
+            username: this.authOptions.username,
+            password: this.authOptions.password,
+            data: request.body ? JSON.stringify(request.body) : ""
         };
 
         return restlerRequest;
