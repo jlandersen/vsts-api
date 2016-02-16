@@ -168,4 +168,127 @@ describe("Team Room Fixture", () => {
             });
         });
     });
+
+    describe("#getUsers", () => {
+        it("Should return users in room", (done) => {
+            let roomId = 305;
+            let mockExecutor = new TestExecutor(`/_apis/chat/rooms/${roomId}/users?api-version=1.0`, "GET", "getUsers");
+            let client = new VstsClient(mockExecutor);
+
+            return client.team.getUsers(roomId).then(result => {
+                expect(result).not.toBeNull();
+
+                let first = result[0];
+                expect(first.user.id).toBe("d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(first.user.displayName).toBe("Normal Paulk");
+                expect(first.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(first.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(first.lastActivity).toBe("2014-10-27T16:36:02.28Z");
+                expect(first.joinedDate).toBe("2014-10-27T16:36:02.203Z");
+                expect(first.isOnline).toBe(true);
+
+                let second = result[1];
+                expect(second.user.id).toBe("3b5f0c34-4aec-4bf4-8708-1d36f0dbc468");
+                expect(second.user.displayName).toBe("Christie Church");
+                expect(second.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/3b5f0c34-4aec-4bf4-8708-1d36f0dbc468");
+                expect(second.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=3b5f0c34-4aec-4bf4-8708-1d36f0dbc468");
+                expect(second.lastActivity).toBe("0001-01-01T00:00:00");
+                expect(second.joinedDate).toBe("0001-01-01T00:00:00");
+                expect(second.isOnline).toBe(false);
+
+                let third = result[2];
+                expect(third.user.id).toBe("8c8c7d32-6b1b-47f4-b2e9-30b477b5ab3d");
+                expect(third.user.displayName).toBe("Chuck Reinhart");
+                expect(third.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/8c8c7d32-6b1b-47f4-b2e9-30b477b5ab3d");
+                expect(third.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=8c8c7d32-6b1b-47f4-b2e9-30b477b5ab3d");
+                expect(third.lastActivity).toBe("0001-01-01T00:00:00");
+                expect(third.joinedDate).toBe("0001-01-01T00:00:00");
+                expect(third.isOnline).toBe(false);
+
+                let fourth = result[3];
+                expect(fourth.user.id).toBe("e5a5f7f8-6507-4c34-b397-6c4818e002f4");
+                expect(fourth.user.displayName).toBe("Fabrikam Fiber");
+                expect(fourth.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/e5a5f7f8-6507-4c34-b397-6c4818e002f4");
+                expect(fourth.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=e5a5f7f8-6507-4c34-b397-6c4818e002f4");
+                expect(fourth.lastActivity).toBe("0001-01-01T00:00:00");
+                expect(fourth.joinedDate).toBe("0001-01-01T00:00:00");
+                expect(fourth.isOnline).toBe(false);
+
+                let fifth = result[4];
+                expect(fifth.user.id).toBe("19d9411e-9a34-45bb-b985-d24d9d87c0c9");
+                expect(fifth.user.displayName).toBe("Johnnie McLeod");
+                expect(fifth.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/19d9411e-9a34-45bb-b985-d24d9d87c0c9");
+                expect(fifth.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=19d9411e-9a34-45bb-b985-d24d9d87c0c9");
+                expect(fifth.lastActivity).toBe("0001-01-01T00:00:00");
+                expect(fifth.joinedDate).toBe("0001-01-01T00:00:00");
+                expect(fifth.isOnline).toBe(false);
+
+                let sixth = result[5];
+                expect(sixth.user.id).toBe("d291b0c4-a05c-4ea6-8df1-4b41d5f39eff");
+                expect(sixth.user.displayName).toBe("Jamal Hartnett");
+                expect(sixth.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/d291b0c4-a05c-4ea6-8df1-4b41d5f39eff");
+                expect(sixth.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=d291b0c4-a05c-4ea6-8df1-4b41d5f39eff");
+                expect(sixth.lastActivity).toBe("0001-01-01T00:00:00");
+                expect(sixth.joinedDate).toBe("0001-01-01T00:00:00");
+                expect(sixth.isOnline).toBe(false);
+
+                done();
+            });
+        });
+    });
+
+    describe("#getUser", () => {
+        it("Should return user in room", (done) => {
+            let roomId = 305;
+            let userId = "d6245f20-2af8-44f4-9451-8107cb2767db";
+            let mockExecutor = new TestExecutor(`/_apis/chat/rooms/305/users/d6245f20-2af8-44f4-9451-8107cb2767db?api-version=1.0`, "GET", "getUser");
+            let client = new VstsClient(mockExecutor);
+
+            return client.team.getUser(roomId, userId).then(result => {
+                expect(result).not.toBeNull();
+
+                expect(result.user.id).toBe("d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(result.user.displayName).toBe("Normal Paulk");
+                expect(result.user.url).toBe("https://fabrikam-fiber-inc.vssps.visualstudio.com/_apis/Identities/d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(result.user.imageUrl).toBe("https://fabrikam.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=d6245f20-2af8-44f4-9451-8107cb2767db");
+                expect(result.lastActivity).toBe("2014-10-27T16:36:02.28Z");
+                expect(result.joinedDate).toBe("2014-10-27T16:36:02.203Z");
+                expect(result.isOnline).toBe(true);
+
+                done();
+            });
+        });
+    });
+
+    describe("#joinRoom", () => {
+        it("Should join room", (done) => {
+            let roomId = 305;
+            let userId = "d6245f20-2af8-44f4-9451-8107cb2767db";
+            let mockExecutor = new TestExecutor("/_apis/chat/rooms/305/users/d6245f20-2af8-44f4-9451-8107cb2767db?api-version=1.0", "PUT", "joinRoom");
+            let client = new VstsClient(mockExecutor);
+
+            return client.team.joinRoom(roomId, userId).then(result => {
+                expect(result).not.toBe(null);
+                expect(result).toBe(userId);
+
+                done();
+            });
+        });
+    });
+
+    describe("#leaveRoom", () => {
+        it("Should leave room", (done) => {
+            let roomId = 305;
+            let userId = "d6245f20-2af8-44f4-9451-8107cb2767db";
+            let mockExecutor = new TestExecutor("/_apis/chat/rooms/305/users/d6245f20-2af8-44f4-9451-8107cb2767db?api-version=1.0", "DELETE");
+            let client = new VstsClient(mockExecutor);
+
+            return client.team.leaveRoom(roomId, userId).then(result => {
+                expect(result).toBe(true);
+
+                done();
+            });
+
+        });
+    });
 });

@@ -19,6 +19,19 @@ export class Room {
     };
 }
 
+export class RoomUser {
+    roomId: number;
+    user: {
+        id: string;
+        displayName: string;
+        url: string;
+        imageUrl: string;
+    };
+    lastActivity: Date;
+    joinedDate: Date;
+    isOnline: boolean;
+}
+
 export class TeamClient {
     private restExecutor: VstsRestExecutor;
 
@@ -58,6 +71,36 @@ export class TeamClient {
         let request = new VstsRestRequest(`/_apis/chat/rooms/${id}`, HttpMethod.DELETE, "1.0");
 
         return this.restExecutor.execute(request).then(result => {
+            return true;
+        });
+    }
+
+    public getUsers(roomId: number): Promise<RoomUser[]> {
+        let request = new VstsRestRequest(`/_apis/chat/rooms/${roomId}/users`, HttpMethod.GET, "1.0");
+
+        return this.restExecutor.execute<Sequence<RoomUser>>(request).then(result => {
+            return result.value;
+        });
+    }
+
+    public getUser(roomId: number, userId: string): Promise<RoomUser> {
+        let request = new VstsRestRequest(`/_apis/chat/rooms/${roomId}/users/${userId}`, HttpMethod.GET, "1.0");
+
+        return this.restExecutor.execute<RoomUser>(request);
+    }
+
+    public joinRoom(roomId: number, userId: string): Promise<string> {
+        let request = new VstsRestRequest(`/_apis/chat/rooms/${roomId}/users/${userId}`, HttpMethod.PUT, "1.0");
+
+        return this.restExecutor.execute<any>(request).then(result => {
+            return result.userId;
+        });
+    }
+
+    public leaveRoom(roomId: number, userId: string): Promise<boolean> {
+        let request = new VstsRestRequest(`/_apis/chat/rooms/${roomId}/users/${userId}`, HttpMethod.DELETE, "1.0");
+
+        return this.restExecutor.execute<any>(request).then(result => {
             return true;
         });
     }
