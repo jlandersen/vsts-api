@@ -1,6 +1,6 @@
 {
   "name": "vsts-api",
-  "version": "1.0.0-beta5",
+  "version": "1.0.0-beta6",
   "description": "Node.js client library for Visual Studio Team Services REST API",
   "main": "./js/src/index.js",
   "typings": "./js/src/index.d.ts",
