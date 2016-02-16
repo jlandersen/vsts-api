@@ -46,6 +46,8 @@ client.project.getProjects().then(result => {
 });
 ```
 
+See the [test suite](https://github.com/jlandersen/vsts-api/tree/master/test) for all supported functionality.
+
 ## License
 Copyright (c) Jeppe Andersen. All rights reserved.
 
